@@ -1,0 +1,1 @@
+# clips-gnome-shell
