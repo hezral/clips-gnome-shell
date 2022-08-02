@@ -1,0 +1,8 @@
+{
+  "name": "Clips",
+  "description": "Multi format clipboard manager for Gnome Shell",
+  "uuid": "clips-gnome-shell@hezral.github.com",
+  "shell-version": [
+    "42"
+  ]
+}

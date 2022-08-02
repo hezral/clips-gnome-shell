@@ -1,0 +1,50 @@
+/* Add your custom extension styling here */
+.clips-panel {
+    width: 550px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border: solid 1px #555;
+}
+
+.menu-grid {
+    color: #ddd;
+    margin: 3px 3px 12px 3px;
+    padding: 0;
+    width: 550px;
+    max-width: 550px;
+}
+
+.menu-header {
+    color: #777;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: 6px;
+    border: solid 1px #555;
+}
+
+.menu-label {
+    font-size: 0.9em;
+    padding: 3px 6px;
+    text-align: left;
+}
+
+.clips-app-scrollview {
+    margin: 10px;
+    height: 250px;
+    /* max-height: 250px; */
+    /* width: 250px; */
+    /* max-width: 640px; */
+}
+
+.clips-app-popupmenu {
+    height: 250px;
+    /* max-height: 250px; */
+    /* width: 250px; */
+    /* max-width: 640px; */
+}
+
+.clips-app-grid {
+    height: 250px;
+    /* max-height: 250px; */
+}
