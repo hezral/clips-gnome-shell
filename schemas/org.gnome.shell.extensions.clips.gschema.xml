@@ -1,9 +1,142 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.shell.extensions.clips" path="/org/gnome/shell/extensions/clips/">
+    <schema id="org.gnome.shell.extensions.clips" path="/org/gnome/shell/extensions/clips/">
     <!-- See also: https://docs.gtk.org/glib/gvariant-format-strings.html -->
-    <key name="show-indicator" type="b">
-      <default>true</default>
-    </key>
-  </schema>
+        <key type="as" name="toggle-menu">
+            <default><![CDATA[['<Super>C']]]></default>
+            <summary>Keyboard shortcut to open Clips</summary>
+        </key>
+        <key type="as" name="copy-clip">
+            <default><![CDATA[['<Ctrl>C']]]></default>
+            <summary>Keyboard shortcut to copy selected clip</summary>
+        </key>
+        <key type="b" name="prefer-dark-style">
+            <default>false</default>
+            <summary>If the dark Gtk stylesheet should be used</summary>
+            <description>If the dark Gtk stylesheet should be used</description>
+        </key>
+        <key type="b" name="first-run">
+            <default>true</default>
+            <summary>Whether this is the first time that Clips has opened</summary>
+            <description>Used to determine whether or not to perform initial install steps</description>
+        </key>
+        <key type="b" name="protected-mode">
+            <default>true</default>
+            <summary>Clips items will be protected with a password set at first run</summary>
+            <description>Used to determine whether or not to protect a clip item</description>
+        </key>
+        <key type="b" name="persistent-mode">
+            <default>true</default>
+            <summary>Close on focus out of the Clips app window</summary>
+            <description>Close on focus out of the Clips app window</description>
+        </key>
+        <key type="b" name="show-close-button">
+            <default>false</default>
+            <summary>Show window close button</summary>
+            <description>Show window close button</description>
+        </key>
+        <key type="b" name="sticky-mode">
+            <default>false</default>
+            <summary>Display Clips app window on all workspaces</summary>
+            <description>Display Clips app window on all workspaces</description>
+        </key>
+        <key type="b" name="always-on-top">
+            <default>true</default>
+            <summary>Display Clips app window above all windows</summary>
+            <description>Display Clips app window above all windows</description>
+        </key>
+        <key type="b" name="hide-on-startup">
+            <default>false</default>
+            <summary>Hides Clips app window on startup</summary>
+            <description>Hides Clips app window on startup</description>
+        </key>
+        <key type="b" name="auto-housekeeping">
+            <default>false</default>
+            <summary>Automatic housekeeping Clips after retention period</summary>
+            <description>Automatic housekeeping Clips after retention period</description>
+        </key>
+        <key type="i" name="auto-retention-period">
+            <default>365</default>
+            <summary>Days to retain clips before house keeping</summary>
+            <description>Set number of days to retain clips before house keeping and deletion</description>
+        </key>
+        <key type="as" name="excluded-apps">
+            <default>[]</default>
+            <summary>Blacklisted apps from Clips</summary>
+            <description>These apps will not be monitored for clipboard events</description>
+        </key>
+        <key type="as" name="protected-apps">
+            <default>[]</default>
+            <summary>Protected apps from Clips</summary>
+            <description>Clips from these apps will be masked and require password to view</description>
+        </key>
+        <key type="as" name="file-types">
+            <default>[]</default>
+            <summary>Exclude file types from Clips</summary>
+            <description>These file types will not be included for clipboard events</description>
+        </key>
+        <key type="as" name="keywords">
+            <default>[]</default>
+            <summary>Exclude keywords from Clips</summary>
+            <description>These keywords will not be included for clipboard events</description>
+        </key>
+        <key type="i" name="min-column-number">
+            <default>3</default>
+            <range min="1" max="20"/>
+            <summary>Set minimum number of columns</summary>
+            <description>Set minimum number of columns</description>
+        </key>
+        <key type="i" name="unprotect-timeout">
+            <default>15</default>
+            <range min="1" max="1800"/>
+            <summary>Timeout (in seconds) after revealing protected clips</summary>
+            <description>Timeout (in seconds) after revealing protected clips</description>
+        </key>
+        <key type="b" name="quick-paste">
+            <default>false</default>
+            <summary>Paste contents in active window after copy action</summary>
+            <description>Paste contents in active window after copy action</description>
+        </key>
+        <key type="b" name="shake-reveal">
+            <default>false</default>
+            <summary>Shake to reveal</summary>
+            <description>Shake to reveal</description>
+        </key>
+        <key type="i" name="shake-sensitivity">
+            <default>3</default>
+            <range min="1" max="10"/>
+            <summary>Shake sensitivity</summary>
+            <description>Shake sensitivity</description>
+        </key>
+        <key name="pos-x" type="i">
+            <default>360</default>
+            <summary>Horizontal position</summary>
+            <description>Saved horizontal position of main window</description>
+        </key>
+        <key name="pos-y" type="i">
+            <default>640</default>
+            <summary>Vertical position</summary>
+            <description>Saved vertical position of main window</description>
+        </key>
+        <key name="window-width" type="i">
+            <default>480</default>
+            <summary>Window width</summary>
+            <description>Saved width of main window</description>
+        </key>
+        <key name="window-height" type="i">
+            <default>480</default>
+            <summary>Window height</summary>
+            <description>Saved height of main window</description>
+        </key>
+        <key type="b" name="debug-mode">
+            <default>false</default>
+            <summary>Shake to reveal</summary>
+            <description>Shake to reveal</description>
+        </key>
+            <key type="b" name="text-mode">
+            <default>false</default>
+            <summary>Text clips only mode</summary>
+            <description>Toggle between text clips only and full clips mode</description>
+        </key>
+    </schema>
 </schemalist>

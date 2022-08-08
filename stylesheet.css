@@ -51,21 +51,26 @@
     /* background-color: transparent; */
 }
 
-.clips-sub-container {
-    width: 200px;
-    height: 160px;
+.clips-container-text {
+    padding: 8px;
+    font-size: smaller;
 }
 
-.clips-container-base:focus, .clips-container-base:hover {
+/* .clips-sub-container {
+    width: 200px;
+    height: 160px;
+} */
+
+/* .clips-container-base:focus, .clips-container-base:hover { */
     /* border-color: rgba(125,48,232,1); */
     /* border-width: 2px; */
-    box-shadow:
+    /* box-shadow:
         0 0 0 1px rgba(125,48,232,0.24),
         0 2px 5px  rgba(125,48,232,0.32),
         0 2px 5px  rgba(125,48,232,0.46),
-        0 14px 28px  rgba(125,48,232,0);
+        0 14px 28px  rgba(125,48,232,0); */
     /* background-color: rgba(125, 48, 232, 0.3); */
-}
+/* } */
 
 .clips-label-type {
     border-radius: 3px;
