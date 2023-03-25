@@ -1,63 +1,46 @@
 'use strict';
 /* prefs.js
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
-const GObject = imports.gi.GObject;
-const Gtk = imports.gi.Gtk;
 
-function init () {}
+const { Adw, Gio, Gtk } = imports.gi;
 
-function buildPrefsWidget () {
-  let widget = new MyPrefsWidget();
-  widget.show();
-  return widget;
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+
+function init() {
 }
 
-const MyPrefsWidget = GObject.registerClass(
-class MyPrefsWidget extends Gtk.Box {
-    _init (params) {
-        super._init(params);
+function fillPreferencesWindow(window) {
+    // Use the same GSettings schema as in `extension.js`
+    const settings = ExtensionUtils.getSettings(
+        'org.gnome.shell.extensions.clips');
+    
+    // Create a preferences page and group
+    const page = new Adw.PreferencesPage();
+    const group = new Adw.PreferencesGroup();
+    page.add(group);
 
-        this.margin = 20;
-        this.set_spacing(15);
-        this.set_orientation(Gtk.Orientation.VERTICAL);
+    // Create a new preferences row
+    const row = new Adw.ActionRow({ title: 'First run' });
+    group.add(row);
 
-        // this.connect('destroy', Gtk.main_quit);
+    // Create the switch and bind its value to the `show-indicator` key
+    const toggle = new Gtk.Switch({
+        active: settings.get_boolean ('first-run'),
+        valign: Gtk.Align.CENTER,
+    });
+    settings.bind(
+        'first-run',
+        toggle,
+        'active',
+        Gio.SettingsBindFlags.DEFAULT
+    );
 
-        let myLabel = new Gtk.Label({
-            label : "Translated Text"
-        });
+    // Add the switch to the row
+    row.add_suffix(toggle);
+    row.activatable_widget = toggle;
 
-        let spinButton = new Gtk.SpinButton();
-        spinButton.set_sensitive(true);
-        spinButton.set_range(-60, 60);
-        spinButton.set_value(0);
-        spinButton.set_increments(1, 2);
-
-        spinButton.connect("value-changed", function (w) {
-            log(w.get_value_as_int());
-        });
-
-        let hBox = new Gtk.Box();
-        hBox.set_orientation(Gtk.Orientation.HORIZONTAL);
-
-        hBox.append(myLabel);
-        hBox.append(spinButton);
-
-        this.append(hBox);
-    }
-});
+    // Add our page to the window
+    window.add(page);
+}

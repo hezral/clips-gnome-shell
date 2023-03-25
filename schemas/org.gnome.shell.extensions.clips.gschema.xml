@@ -10,6 +10,11 @@
             <default><![CDATA[['<Ctrl>C']]]></default>
             <summary>Keyboard shortcut to copy selected clip</summary>
         </key>
+        <key type="i" name="clip-limit">
+            <default>500</default>
+            <summary>Number of clips to keep in cache</summary>
+            <description>Number of clips to keep in cache</description>
+        </key>
         <key type="b" name="prefer-dark-style">
             <default>false</default>
             <summary>If the dark Gtk stylesheet should be used</summary>
