@@ -48,6 +48,12 @@
     font-size: x-small;
 }
 
+.clips-container-color {
+    padding: 8px;
+    font-size: small;
+    font-weight: bold;
+}
+
 .clips-label-type {
     /* border-radius: 3px; */
     /* background-color: rgba(0,0,0,0.75); */
@@ -97,8 +103,8 @@
 }
 
 .clips-app-scrollview {
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     padding-left: 8px;
     padding-right: 1px;
 }

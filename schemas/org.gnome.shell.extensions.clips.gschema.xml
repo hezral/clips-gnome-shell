@@ -6,6 +6,10 @@
             <default><![CDATA[['<Super>C']]]></default>
             <summary>Keyboard shortcut to open Clips</summary>
         </key>
+        <key type="as" name="toggle-search">
+            <default><![CDATA[['<Super>F']]]></default>
+            <summary>Keyboard shortcut to search for clips</summary>
+        </key>
         <key type="as" name="copy-clip">
             <default><![CDATA[['<Ctrl>C']]]></default>
             <summary>Keyboard shortcut to copy selected clip</summary>

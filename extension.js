@@ -41,6 +41,12 @@ class Indicator extends PanelMenu.Button {
     _init() {
         super._init(0.0, _('Clips'));
 
+        // initialize settings
+        this._settings = ExtensionUtils.getSettings("org.gnome.shell.extensions.clips");
+
+        // initialze cache dir
+        this._initCacheDir();
+
         let gicon = Gio.icon_new_for_string(`${Me.path}/icons/clips-symbolic.svg`);
         let icon = new St.Icon({ gicon, icon_size: 24, style_class: 'icon' });
         this.add_child(icon);
@@ -63,44 +69,23 @@ class Indicator extends PanelMenu.Button {
         // log(`applicationStylesheet ${applicationStylesheet}`);
         // log(`themeStylesheet ${themeStylesheet}`);
 
-        // initialize settings
-        this._settings = ExtensionUtils.getSettings("org.gnome.shell.extensions.clips");
-
-        // initialze cache dir
-        this._initCacheDir();
-
-        // initialize var for cache files
-        
-
         // load clips from cache
         const addClips = this._addClip.bind(this);
         Helpers.readDirectory(Gio.File.new_for_path(CACHE_DIR), this._settings.get_int('clip-limit'), 0, 50, addClips, this);
 
         
-
-        Main.wm.addKeybinding(
-            "toggle-menu", this._settings,
-            Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
-            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
-            () => {
-                this.menu.toggle();
-                this._appGrid._flowbox.get_first_child().grab_key_focus();
-            }
-        );
-
-        // Main.wm.addKeybinding(
-        //     "copy-clip", this._settings,
-        //     Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
-        //     Shell.ActionMode.ALL,
-        //     this._copyClip.bind(this)
-        // );
         
-        
+        // initialze listener for clipboard events
         this._initListener();
+
+        // initialize keybindings
+        this._initKeybindings();
 
         this.menu.connect('open-state-changed', () => {
             this._menuStateChanged();
         });
+
+
 
         // this.refreshChartsTimerId = GLib.idle_add(GLib.PRIORITY_DEFAULT, 2000, () => this._refreshClips());
 
@@ -182,58 +167,100 @@ class Indicator extends PanelMenu.Button {
         this.selection.disconnect(this._selectionOwnerChangedId);
     }
 
-    _initNotificationSource () {
-        if (!this._notificationSource) {
-            this._notificationSource = new MessageTray.Source('Clips', 'clips-symbolic');
-            Main.messageTray.add(this._notificationSource);
-            this._notificationSource.connect('destroy', () => {
-                this._notificationSource = null;
-            });
-        }
+    _initKeybindings () {
+        Main.wm.addKeybinding(
+            "toggle-menu", this._settings,
+            Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
+            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
+            () => {
+                this.menu.toggle();
+                this._appGrid._flowbox.get_first_child().grab_key_focus();
+            }
+        );
+
+        Main.wm.addKeybinding(
+            "toggle-search", this._settings,
+            Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
+            Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
+            () => {
+                if (this.menu.isOpen) {
+                    this._appGrid._toggleSearch();
+                }
+            }
+        );
+
+        // Main.wm.addKeybinding(
+        //     "toggle-settings", this._settings,
+        //     Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
+        //     Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
+        //     () => {
+        //         if (this.menu.isOpen) {
+        //             this._appGrid._toggleSettings();
+        //         }
+        //     }
+        // );
+
+
+        // Main.wm.addKeybinding(
+        //     "copy-clip", this._settings,
+        //     Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
+        //     Shell.ActionMode.ALL,
+        //     this._copyClip.bind(this)
+        // );
     }
 
-    _showNotification (message) {
-        let notification = null;
+    // _initNotificationSource () {
+    //     if (!this._notificationSource) {
+    //         this._notificationSource = new MessageTray.Source('Clips', 'clips-symbolic');
+    //         Main.messageTray.add(this._notificationSource);
+    //         this._notificationSource.connect('destroy', () => {
+    //             this._notificationSource = null;
+    //         });
+    //     }
+    // }
 
-        this._initNotificationSource();
+    // _showNotification (message) {
+    //     let notification = null;
 
-        if (this._notificationSource.count === 0) {
-            notification = new MessageTray.Notification(this._notificationSource, message);
-        }
-        else {
-            notification = this._notificationSource.notifications[0];
-            notification.update(message, '', { clear: true });
-        }
+    //     this._initNotificationSource();
 
-        notification.setTransient(true);
-        if (Config.PACKAGE_VERSION < '3.38')
-            this._notificationSource.notify(notification);
-        else
-            this._notificationSource.showNotification(notification);
-    }
+    //     if (this._notificationSource.count === 0) {
+    //         notification = new MessageTray.Notification(this._notificationSource, message);
+    //     }
+    //     else {
+    //         notification = this._notificationSource.notifications[0];
+    //         notification.update(message, '', { clear: true });
+    //     }
+
+    //     notification.setTransient(true);
+    //     if (Config.PACKAGE_VERSION < '3.38')
+    //         this._notificationSource.notify(notification);
+    //     else
+    //         this._notificationSource.showNotification(notification);
+    // }
 
 
-    _setupTimeout (reiterate) {
-        let that = this;
-        reiterate = typeof reiterate === 'boolean' ? reiterate : true;
-        var test = 1
-        this._clipboardTimeoutId = Mainloop.timeout_add(2000, function () {
-            that._refreshClips(test);
-            test++;
+    // _setupTimeout (reiterate) {
+    //     let that = this;
+    //     reiterate = typeof reiterate === 'boolean' ? reiterate : true;
+    //     var test = 1
+    //     this._clipboardTimeoutId = Mainloop.timeout_add(2000, function () {
+    //         that._refreshClips(test);
+    //         test++;
 
-            // If the timeout handler returns `false`, the source is
-            // automatically removed, so we reset the timeout-id so it won't
-            // be removed on `.destroy()`
-            if (reiterate === false)
-                that._clipboardTimeoutId = null;
+    //         // If the timeout handler returns `false`, the source is
+    //         // automatically removed, so we reset the timeout-id so it won't
+    //         // be removed on `.destroy()`
+    //         if (reiterate === false)
+    //             that._clipboardTimeoutId = null;
 
-            return reiterate;
-        });
-    }
+    //         return reiterate;
+    //     });
+    // }
 
-    _refreshClips (test) {
-        log(`Refresh Clips ${test}`);
-    }
+    // _refreshClips (test) {
+    //     log(`Refresh Clips ${test}`);
+    // }
 
     _menuStateChanged () {
         if (this.menu.isOpen) {
